@@ -14,7 +14,7 @@ int dirStep = 2;
 
 void setup() {
 	// initialize the serial port:
-	Serial.begin(9600);
+	Serial.begin(115200);
 	myStepper.setSpeed(50);
 
 	// softserial.begin(9600);
@@ -32,9 +32,9 @@ void send_bit() {
 
 void send_byte(int data) {
 	int i = 0;
-	int tmp = 0;
+	int tmp = data;
 	for(i = 0; i <= 8; i++){
-		tmp = data >> i;
+		tmp = tmp >> i;
 		tmp &= 1;
 		if (tmp) {
 			send_bit();
@@ -44,12 +44,12 @@ void send_byte(int data) {
 }
 
 void loop() {
-	// int data = 0x55;
-	// if (softserial.available()) {
-		// data = SoftwareSerial.read();
-		// send_byte(data);
-	// }
-	send_bit();
-	delay(BYTE_TIME);
+	int data = 0;
+	if (Serial.available()) {
+		data = Serial.read();
+		send_byte(data);
+	}
+	// send_bit();
+	// delay(BYTE_TIME);
 
 }
